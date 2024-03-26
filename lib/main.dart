@@ -18,6 +18,8 @@ class _HomeState extends State<Home> {
   TextEditingController alturaController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _textInfo = "";
+  double _peso = 0;
+  double _altura = 0;
 
   void _resetCampos() {
     _formKey.currentState!.reset();
@@ -26,6 +28,13 @@ class _HomeState extends State<Home> {
     setState(() {
       _textInfo = "";
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    pesoController.text = _peso.toStringAsFixed(1);
+    alturaController.text = _altura.toStringAsFixed(1);
   }
 
   void _calcular() {
@@ -56,7 +65,7 @@ class _HomeState extends State<Home> {
         title: Text("Calculadora de IMC",
             style: TextStyle(color: Colors.white, fontSize: 25)),
         centerTitle: true,
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.green,
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -75,15 +84,15 @@ class _HomeState extends State<Home> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Icon(Icons.person, size: 120, color: Colors.purple),
+              Icon(Icons.person, size: 120, color: Colors.green),
               TextFormField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     labelText: "Peso (kg)",
-                    labelStyle: TextStyle(fontSize: 30, color: Colors.purple)),
+                    labelStyle: TextStyle(fontSize: 30, color: Colors.green)),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: Color.fromARGB(255, 152, 76, 175), fontSize: 25.0),
+                    color: Colors.green, fontSize: 25.0),
                 controller: pesoController,
                 validator: (value) {
                   if (value!.isEmpty)
@@ -92,13 +101,25 @@ class _HomeState extends State<Home> {
                     return null;
                 },
               ),
+              Slider(
+                value: _peso,
+                max: 200,
+                label: _peso.round().toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    _peso = value;
+                    pesoController.text = _peso.toStringAsFixed(1);
+                  });
+                },
+                activeColor: Colors.green,
+              ),
               TextFormField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     labelText: "Altura (cm)",
-                    labelStyle: TextStyle(color: Colors.purple, fontSize: 30)),
+                    labelStyle: TextStyle(color: Colors.green, fontSize: 30)),
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.purple, fontSize: 25.0),
+                style: TextStyle(color: Colors.green, fontSize: 25.0),
                 controller: alturaController,
                 validator: (value) {
                   if (value!.isEmpty)
@@ -107,6 +128,18 @@ class _HomeState extends State<Home> {
                     return null;
                 },
               ),
+              Slider(
+                value: _altura,
+                max: 250,
+                label: _altura.round().toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    _altura = value;
+                    alturaController.text = _altura.toStringAsFixed(1);
+                  });
+                },
+                activeColor: Colors.green,
+              ),
               Padding(
                   padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                   child: ElevatedButton(
@@ -114,7 +147,7 @@ class _HomeState extends State<Home> {
                       if (_formKey.currentState!.validate()) _calcular();
                     },
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple,
+                        backgroundColor: Colors.green,
                         padding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         textStyle: TextStyle(
@@ -127,7 +160,7 @@ class _HomeState extends State<Home> {
               Text(
                 _textInfo,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.purple, fontSize: 25.0),
+                style: TextStyle(color: Colors.green, fontSize: 25.0),
               )
             ], //<widget>[]
           ),
